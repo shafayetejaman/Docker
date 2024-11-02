@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block link %}
+<style>
+    body {
+        background: linear-gradient(13.89deg, #030640 10.47%, #690e87 98.32%, #383b81);
+        height: 100%;
+    }
+
+    .card {
+        background-color: rgb(115, 59, 151);
+    }
+
+    .card-img-top {
+        width: 100%;
+    }
+</style>
+
+{% endblock link %}
+
+{% block content %}
+<section>
+    <h1 class="m-5 text-danger">Wellcome {{user.username}}</h1>
+    <a href="{% url "pass_change" %}" class="m-5 btn btn-danger">Change Your Password</a>
+    <a href="{% url "edit_profile" %}" class="m-5 btn btn-danger">Edit Your Profile</a>
+</section>
+
+<section>
+    <div class="card-page row row-cols-4 mx-4">
+
+        {% for transaction in history %}
+        {% with car=transaction.car %}
+
+        <div class="col my-3">
+            <div class="card border-0">
+                <img src="{{ car.image.url }}" class="card-img-top" alt="Car Image">
+                <div class="card-body text-center">
+                    <a href="{% url 'detail' car.id car.slug %}" class="text-decoration-none">
+                        <h3 class="card-title text-danger">{{ car.name }}</h3>
+                    </a>
+                    <h5 class="text-danger my-3">Price: {{ car.price }}$</h5>
+                    <h6 class="text-danger my-3">Parched On: {{ transaction.parched }}</h6>
+                    <h5 class="text-white btn bg-primary mt-4">Brand: {{ car.brand.name }}</h5>
+                </div>
+            </div>
+        </div>
+
+        {% endwith %}
+        {% endfor %}
+    </div>
+</section>
+
+
+
+{% endblock content %}

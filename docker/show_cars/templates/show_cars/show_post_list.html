@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block link %}
+<style>
+    body {
+        background: linear-gradient(13.89deg, #030640 10.47%, #690e87 98.32%, #383b81);
+        height: 100%;
+    }
+
+    .card {
+        background-color: rgb(115, 59, 151);
+
+    }
+
+    .card-img-top {
+        width: 100%;
+    }
+</style>
+
+{% endblock link %}
+
+{% block content %}
+{{block.super}}
+
+<!-- card section -->
+<section class="container-fluid my-5">
+
+    <div class="text-center my-5">
+
+        <input type="radio" class="btn-check" name="options-base" id="option0" autocomplete="off"
+            {% if not current_brand %}checked{% endif %}>
+        <label class="btn btn-outline-danger" for="option0">
+            <a class="text-decoration-none text-white" href="{% url "home" %}">All
+            </a>
+        </label>
+
+        {% for brand in brands %}
+
+        <input type="radio" class="btn-check" name="options-base" id="option{{brand.id}}" autocomplete="off"
+            {% if current_brand == brand %}checked{% endif %}>
+        <label class="btn btn-outline-danger" for="option{{brand.id}}">
+            <a class="text-decoration-none text-white" href="{% url "group_by" brand.slug %}">{{brand.name}}
+            </a>
+        </label>
+
+        {% endfor %}
+
+    </div>
+
+    <h2 class="text-white m-5 mb-3">Result Found: {{cars|length}}</h2>
+
+    <div class="card-page row row-cols-3 mx-4">
+
+        {% for car in cars %}
+
+        <div class="col my-3">
+            <div class="card border-0">
+                <img src="{{car.image.url}}" class="card-img-top" alt="...">
+
+                <div class="card-body text-center">
+
+                    <a href="{% url "detail" car.id car.slug %}" class="text-decoration-none">
+                        <h2 class="card-title text-danger">{{car.name}}</h2>
+                    </a>
+
+                    <p class="text-dark h4 my-4">
+                        Description: {{car.description | truncatewords:5}}
+                    </p>
+
+                    <h5 class="text-light">Quantity: {{car.quantity}}</h5>
+                    <h5 class="text-danger">Price: {{car.price}}$</h5>
+                    <h5 class="text-white btn bg-primary mt-4">Brand: {{car.brand.name}}</h5>
+
+                    {% if logged and car.quantity > 0 %}
+                    <h5 class="btn bg-success text-white mt-4">Add To Cart</h5>
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+
+        {% endfor %}
+    </div>
+</section>
+
+{% endblock content %}
